@@ -1,3 +1,3 @@
 # startup
 
-testhost
+testgithub
