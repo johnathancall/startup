@@ -12,7 +12,7 @@ Once Dave implements Bookmarker++ into his business, "Dave's Pancakes" will be f
 
 ### Design
 
-![Picture of rough design of website, featuring the login screen at the top and the website directory screen at the bottom.]()
+![Uploading 20230923_151933.jpg…]()
 
 ### Key Features
 
