@@ -12,7 +12,7 @@ Once Dave implements Bookmarker++ into his business, "Dave's Pancakes" will be f
 
 ### Design
 
-![Uploading 20230923_151933.jpg…]()
+![20230923_151933](https://github.com/johnathancall/startup/assets/22202701/515668cb-acd2-4fa7-a8ac-d5db8ec4ae13)
 
 ### Key Features
 
