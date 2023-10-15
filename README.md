@@ -31,3 +31,13 @@ I will implement these technologies as described.
 - JavaScript - Provides login, website addition, and display of website status.
 - DB - Store users and website directory in database.
 - Websocket - Real-time updates as to each website's status.
+
+## HTML Deliverable
+
+For this deliverable I outlined a loose structure of my website with HTML, consisting of the following features:
+- HTML pages for the index, websites, and about sections of the website and links between them
+- Text content describing the purpose of the website as well as placeholding for user websites/directories
+- Image to add flavor to the about.html page
+- Login placeholder with username and password on the index.html page
+- Data placeholder in the form of websites and directories, which will be added by the user and stored in the database
+- WebSocket placeholder depicting the status of each webpage
