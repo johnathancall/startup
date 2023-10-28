@@ -41,3 +41,19 @@ For this deliverable I outlined a loose structure of my website with HTML, consi
 - Login placeholder with username and password on the index.html page
 - Data placeholder in the form of websites and directories, which will be added by the user and stored in the database
 - WebSocket placeholder depicting the status of each webpage
+
+## CSS Deliverable
+
+I styled my website using CSS by doing the following:
+- Added background colors to all subdomains
+- Created rulesets for directories and websites
+- Created header and footer that remains constant across all subdomains
+
+## JS Deliverable
+
+I removed the directory capability because I wasn't satisfied with how the CSS looked for it, and renamed the "Add Directory" button to "Add Website".
+
+I added functionality to my website by doing the following:
+- Saved username and password to localStorage
+- Implemented functionality for the Add Website button, that gives the user a popup message to include which website they want to add
+- Implemented functionality for the Remove Website button, that removes the selected website
