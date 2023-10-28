@@ -57,3 +57,4 @@ I added functionality to my website by doing the following:
 - Saved username and password to localStorage
 - Implemented functionality for the Add Website button, that gives the user a popup message to include which website they want to add
 - Implemented functionality for the Remove Website button, that removes the selected website
+- Implemented stubs for future database and WebSocket functionality
