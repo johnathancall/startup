@@ -1,6 +1,6 @@
 ### In the following code, what does the link element do?
 
-Defines the relationship between the current document and an external resource.
+Defines the relationship between the current document and an external resource - i.e. to a stylesheet or icon.
 
 ### In the following code,  what does a div tag do?
 
@@ -83,7 +83,7 @@ div {
 
 ### In the CSS box model, what is the ordering of the box layers starting at the inside and working out?
 
-Content, padding, order, margin
+Content, padding, border, margin
 
 ### Given the following HTML, what CSS would you use to set the text "troubl" to green and leave the "double" text unaffected?
 
@@ -160,7 +160,7 @@ getElementByID()
 
 ### Which of the following correctly describes JSON?
 
-SON provides a simple, and yet effective way, to share and store data. By design JSON is easily convertible to, and from, JavaScript objects. This make it a very convenient data format when working with web technologies. Because of its simplicity, standardization, and compatibility with JavaScript, JSON has become one of the world's most popular data formats.
+JSON provides a simple, and yet effective way, to share and store data. By design JSON is easily convertible to, and from, JavaScript objects. This make it a very convenient data format when working with web technologies. Because of its simplicity, standardization, and compatibility with JavaScript, JSON has become one of the world's most popular data formats.
 
 {
   "class": {
@@ -215,3 +215,54 @@ HTTPS, HTTP, SSH
 
 ### What will the following code using Promises output when executed?
 
+function pickupPizza() {
+  const order = createOrder();
+
+  // Promise
+  placeOrder(order)
+    .then((order) => serveOrder(order))
+    .catch((order) => {
+      orderFailure(order);
+    });
+}
+
+function createOrder() {
+  // Make the order and associate it with a new HTML element
+  const id = Math.floor(Math.random() * 10000);
+  const orderElement = document.createElement("li");
+  const order = { element: orderElement, id: id };
+
+  // Insert the order into the HTML list
+  orderElement.innerHTML = `<span>[${order.id}] &#128523; <i>Waiting</i> ...</span>`;
+  const orders = document.getElementById("orders");
+  orders.appendChild(orderElement);
+
+  return order;
+}
+
+function placeOrder(order) {
+  return new Promise((resolve, reject) => {
+    doWork(order, 1000, 3000, resolve, reject, `cashier too busy`);
+  });
+}
+
+function doWork(order, min, max, resolve, reject, errMsg) {
+  let workTime = Math.random() * (max - min) + min;
+  setTimeout(() => {
+    workTime = Math.round(workTime);
+    if (workTime < max * 0.85) {
+      resolve(order);
+    } else {
+      order.error = errMsg;
+      reject(order);
+    }
+  }, workTime);
+}
+
+function serveOrder(order) {
+  order.element.innerHTML = `<span>[${order.id}] &#127829; <b>Served</b>!</span>`;
+}
+
+function orderFailure(order) {
+  order.element.innerHTML = `<span> [${order.id}] &#128544; <b class='failure'>Failure</b>! ${order.error}</span>`;
+}
