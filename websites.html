@@ -5,94 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Websites</title>
     <link rel="icon" href="favicon.ico" />
+
+    <link rel="stylesheet" href="main.css" />
+    <link rel="stylesheet" href="websites.css" />
+
+     <!-- Include bootstrap CSS framework -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi"
+      crossorigin="anonymous"
+    />
   </head>
   <body>
     <header>
       <h1>Bookmarker++<sup>&reg;</sup></h1>
 
       <nav>
-        <menu>
+	<menu>
           <li><a href="index.html">Home</a></li>
           <li><a href="websites.html">Websites</a></li>
           <li><a href="about.html">About</a></li>
         </menu>
       </nav>
-
-      <hr />
     </header>
 
     <main>
-      <div class="directory-dropdown">
-        <button class="removeButton">-</button>
-        <button class="directory">Directory 1</button>
-
-        <div class="dropdown-item">
-          <button class="removeButton">-</button>
-          <a href="byu.edu">BYU</a>>
-          <span class="status">Running</span>
-        </div>
-        <div class="dropdown-item">
-          <button class="removeButton">-</button>
-          <a href="learningsuite.byu.edu">Learning Suite</a>
-          <span class="status">Down</span>
-        </div>
-        <div class="dropdown-item">
-          <button class="removeButton">-</button>
-          <a href="instructure.byu.edu">Canvas</a>
-          <span class="status">Running</span>
-        </div>
-
-        <button class="addSiteButton">Add Website</button>
+      <div class="container" id="container">
+        <button class="addWebsiteButton" onclick="createWebsite()">Add Website</button>
       </div>
 
-      <br />
+    </main>
 
-      <div class="directory-dropdown">
-        <button class="removeButton">-</button>
-        <button class="directory">Directory 2</button>
+    <footer>
+      <span class="text-reset">Johnathan Call</span>
+      <a href="https://github.com/johnathancall/startup">GitHub</a>
+    </footer>
 
-        <div class="dropdown-item">
-          <button class="removeButton">-</button>
-          <a href="google.com">Google</a>
-          <span class="status">Running</span>
-        </div>
-
-        <button class="addSiteButton">Add Website</button>
-    </div>
-
-    <br />
-
-    <div class="directory-dropdown">
-      <button class="removeButton">-</button>
-      <button class="directory">Directory 3</button>
-
-      <div class="dropdown-item">
-        <button class="removeButton">-</button>
-        <a href="facebook.com">Facebook</a>
-        <span class="status">Running</span>
-      </div>
-      <div class="dropdown-item">
-        <button class="removeButton">-</button>
-        <a href="instagram.com">Instagram</a>
-        <span class="status">Running</span>
-      </div>
-
-      <button class="addSiteButton">Add Website</button>
-    </div>
-
-    <br />
-    <br />
-
-    <button class="addDirectoryButton">Add Directory</button>
-  </main>
-  
-  <footer>
-    <hr />
-    <span class="text-reset">Johnathan Call</span>
-    <br />
-    <a href="https://github.com/johnathancall/startup">GitHub</a>
-  </footer>
-
-  <script src="websites.js"></script>
-</body>
+    <script src="websites.js"></script>
+  </body>
 </html>
