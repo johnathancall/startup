@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <!-- Tell browsers not to scale the viewport automatically -->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Simon HTML</title>
+      <link rel="icon" href="favicon.ico" />
+
+      <script src="login.js"></script>
+      <link rel="stylesheet" href="main.css" />
+    </head>
+    <body>
+      <header>
+        <h1>Bookmarker++<sup>&reg;</sup></h1>
+
+        <nav>
+          <menu>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="websites.html">Websites</a></li>
+            <li><a href="about.html">About</a></li>
+          </menu>
+        </nav>
+      </header>
+
+      <main>
+        <h1>Welcome</h1>
+        <p>Login to view websites</p>
+        <form method="get" action="websites.html">
+          <label for="name">Username</label>
+          <input type="text" id="username" placeholder="username" />
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="password" />
+          <button type="submit">Login</button>
+        </form>
+      </main>
+
+      <footer>
+        <span class="text-reset">Johnathan Call</span>
+        <a href="https://github.com/johnathancall/startup">GitHub</a>
+      </footer>
+    </body>
+  </html>
