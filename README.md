@@ -58,3 +58,13 @@ I added functionality to my website by doing the following:
 - Implemented functionality for the Add Website button, that gives the user a popup message to include which website they want to add
 - Implemented functionality for the Remove Website button, that removes the selected website
 - Implemented stubs for future database and WebSocket functionality
+
+## WebServices Deliverable
+
+I used Node.js and Express to convert my application into a web service.
+
+Served up my frontend using Express static middleware.
+
+Provided endpoints, namely for accessing the current list of websites and adding a new website, and referenced them from the frontend.
+
+Added third-part endpoints, specifically by referencing random quote and picture generators in the 'about' page.
