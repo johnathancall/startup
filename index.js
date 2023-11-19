@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const db = require('./database.js');
 
 // The service port defaults to 3000 or is read from the program arguments
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
@@ -28,12 +29,21 @@ apiRouter.post('/website/', (req, res) => {
   res.send(websites);
 });
 
+apiRouter.get('/login/', (req, res) => {
+  res.send(db.getUser((req.query.username, req.query.password));
+});
+
+apiRouter.get('/register/', (req, res) = {
+  res.send(db.addUser(req.query.username, req.query.password));
+});
+
 // Return the homepage if the path is unknown
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-let websites = [];
+// Handling website updates
+let websites = db.getWebsites('test');
 function updateWebsites(newWebsite, websites) {
   websites.push(newWebsite);
 }
