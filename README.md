@@ -68,3 +68,10 @@ Served up my frontend using Express static middleware.
 Provided endpoints, namely for accessing the current list of websites and adding a new website, and referenced them from the frontend.
 
 Added third-part endpoints, specifically by referencing random quote and picture generators in the 'about' page.
+
+## Database Deliverable
+
+Included /register/ and /login/ endpoints, called upon register and login respectively
+Added database.js to create new collection for each user under the startup database
+
+
