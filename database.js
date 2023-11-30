@@ -4,6 +4,7 @@ const config = require('./dbConfig.json');
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 const db = client.db('startup');
+const collection = db.collection('websites');
 
 // This will asynchronously test the connection and exit the process if it fails
 (async function testConnection() {
@@ -15,24 +16,26 @@ const db = client.db('startup');
 });
 
 async function addUser(username, password) {
-  testConnection();
-  const result = await db.collection('test');
-  return result;
+  return;
 }
 
 async function addWebsite(username, website) {
-  const result = await db.collection('test').insertOne(website);
+  const result = await collection.insertOne({name: username, site: website});
   return result;
 }
 
 async function getUser(username, password) {
-  const result = await db.collection('test');
-  return result;
+  return;
 }
 
 async function getWebsites(username) {
-  const result = await db.collection('test');
-  return result;
+  try {
+    const result = await collection.find({}).toArray();
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
 }
 
-module.exports = { addScore, getHighScores };
+module.exports = {addUser, addWebsite, getUser, getWebsites};

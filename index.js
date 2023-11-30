@@ -8,6 +8,8 @@ const port = process.argv.length > 2 ? process.argv[2] : 3000;
 // Text to display for the service name
 const serviceName = process.argv.length > 3 ? process.argv[3] : 'website';
 
+app.use(express.json());
+
 // Serve up the static content
 app.use(express.static('public'));
 
@@ -24,17 +26,23 @@ apiRouter.get('/websites', (req, res) => {
   res.send(websites);
 });
 
-apiRouter.post('/website/', (req, res) => {
-  websites = updateWebsites(req.body, websites);
+apiRouter.post('/website/', async (req, res) => {
+  websites = await updateWebsites(req.body.name, websites);
+  console.log(req.body.username);
+  db.addWebsite(req.body.username, req.body.name);
   res.send(websites);
 });
 
-apiRouter.get('/login/', (req, res) => {
-  res.send(db.getUser((req.query.username, req.query.password));
+apiRouter.post('/login/', async (req, res) => {
+  console.log('login');
+  res.send(await db.getUser((req.query.username, req.query.password)));
 });
 
-apiRouter.get('/register/', (req, res) = {
-  res.send(db.addUser(req.query.username, req.query.password));
+apiRouter.post('/register/', async (req, res) => {
+  console.log('register');
+  await db.addUser(req.query.username, req.query.password);
+  console.log('after');
+  res.sendStatus(200);
 });
 
 // Return the homepage if the path is unknown
@@ -43,9 +51,10 @@ app.use((_req, res) => {
 });
 
 // Handling website updates
-let websites = db.getWebsites('test');
+let websites = [];
 function updateWebsites(newWebsite, websites) {
   websites.push(newWebsite);
+  return websites;
 }
 
 app.listen(port, () => {
