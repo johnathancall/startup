@@ -72,6 +72,7 @@ Added third-part endpoints, specifically by referencing random quote and picture
 ## Database Deliverable
 
 Included /register/ and /login/ endpoints, called upon register and login respectively
+
 Added database.js to create new collection for each user under the startup database
 
 
