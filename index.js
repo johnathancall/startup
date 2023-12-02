@@ -1,66 +1,130 @@
+const cookieParser = require('cookie-parser');
+const bcrypt = require('bcrypt');
 const express = require('express');
 const app = express();
-const db = require('./database.js');
+const DB = require('./database.js');
+
+const authCookieName = 'token';
+
+// The service port may be set on the command line
+const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
 let username = 'test';
 
-// The service port defaults to 3000 or is read from the program arguments
-const port = process.argv.length > 2 ? process.argv[2] : 3000;
-
-// Text to display for the service name
-const serviceName = process.argv.length > 3 ? process.argv[3] : 'website';
-
+// JSON body parsing using built-in middleware
 app.use(express.json());
 
-// Serve up the static content
+// Use the cookie parser middleware for tracking authentication tokens
+app.use(cookieParser());
+
+// Serve up the applications static content
 app.use(express.static('public'));
 
-// Provide the version of the application
-app.get('/config', (_req, res) => {
-  res.send({ version: '20221228.075705.1', name: serviceName });
-});
+// Trust headers that are forwarded from the proxy so we can determine IP addresses
+app.set('trust proxy', true);
 
 // Router for service endpoints
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-apiRouter.get('/websites', async (req, res) => {
-  const websites = await db.getWebsites(username);
+// CreateAuth token for a new user
+apiRouter.post('/auth/register', async (req, res) => {
+  if (await DB.getUser(req.body.username)) {
+    res.status(409).send({ msg: 'Existing user' });
+  } else {
+    const user = await DB.addUser(req.body.username, req.body.password);
+
+    // Set the cookie
+    setAuthCookie(res, user.token);
+
+    res.send({
+      id: user._id,
+    });
+
+    username = req.body.username;
+  }
+});
+
+// GetAuth token for the provided credentials
+apiRouter.post('/auth/login', async (req, res) => {
+  const user = await DB.getUser(req.body.username);
+  if (user) {
+    if (await bcrypt.compare(req.body.password, user.password)) {
+      setAuthCookie(res, user.token);
+      res.send({ id: user._id });
+      username = req.body.username;
+      return;
+    }
+  }
+  res.status(401).send({ msg: 'Unauthorized' });
+});
+
+// DeleteAuth token if stored in cookie
+apiRouter.delete('/auth/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+});
+
+// GetUser returns information about a user
+apiRouter.get('/user/:name', async (req, res) => {
+  const user = await DB.getUser(req.params.username);
+  if (user) {
+    const token = req?.cookies.token;
+    res.send({ username: user.name, authenticated: token === user.token });
+    return;
+  }
+  res.status(404).send({ msg: 'Unknown' });
+});
+
+// secureApiRouter verifies credentials for endpoints
+var secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+secureApiRouter.use(async (req, res, next) => {
+  authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
+  }
+});
+
+secureApiRouter.get('/websites', async (req, res) => {
+  const websites = await DB.getWebsites(username);
 
   res.send(websites);
 });
 
-apiRouter.post('/website/', async (req, res) => {
+secureApiRouter.post('/website/', async (req, res) => {
   websites = await updateWebsites(req.body.name, websites);
-  db.addWebsite(req.body.username, req.body.name);
+  DB.addWebsite(req.body.username, req.body.name);
   res.send(websites);
 });
 
-apiRouter.post('/login/', async (req, res) => {
-  console.log('login');
-  username = req.query.username;
-  res.send(await db.getUser((req.query.username, req.query.password)));
+
+// Default error handler
+app.use(function (err, req, res, next) {
+  res.status(500).send({ type: err.name, message: err.message });
 });
 
-apiRouter.post('/register/', async (req, res) => {
-  await db.addUser(req.query.username, req.query.password);
-  res.sendStatus(200);
-});
-
-apiRouter.post('/remove/', async (req, res) => {
-  await db.removeWebsite(username, req.body.website);
-  websites = await updateWebsites(username, websites);
-
-  res.send(websites);
-});
-
-// Return the homepage if the path is unknown
+// Return the application's default page if the path is unknown
 app.use((_req, res) => {
   res.sendFile('index.html', { root: 'public' });
 });
 
-// Handling website updates
+// setAuthCookie in the HTTP response
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  }); 
+}
+
+//Handling website updates
 let websites = [];
+
 function updateWebsites(newWebsite, websites) {
   websites.push(newWebsite);
   return websites;
@@ -74,5 +138,3 @@ function removeWebsite(oldWebsite, websites) {
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
-
-module.exports = app;

@@ -1,10 +1,13 @@
+const bcrypt = require('bcrypt');
+const uuid = require('uuid');
 const { MongoClient } = require('mongodb');
 const config = require('./dbConfig.json');
 
 const url = `mongodb+srv://${config.userName}:${config.password}@${config.hostname}`;
 const client = new MongoClient(url);
 const db = client.db('startup');
-const collection = db.collection('websites');
+const websiteCollection = db.collection('websites');
+const userCollection = db.collection('users');
 
 // This will asynchronously test the connection and exit the process if it fails
 (async function testConnection() {
@@ -16,7 +19,15 @@ const collection = db.collection('websites');
 });
 
 async function addUser(username, password) {
-  return;
+  const passwordHash = await bcrypt.hash(password, 10);
+
+  const user = {
+    name: username,
+    password: passwordHash,
+    token: uuid.v4(),
+  }
+  await userCollection.insertOne(user);
+  return user;
 }
 
 async function addWebsite(username, website) {
@@ -25,12 +36,17 @@ async function addWebsite(username, website) {
 }
 
 async function getUser(username, password) {
-  return;
+  return userCollection.findOne({name: username});
+}
+
+
+function getUserByToken(token) {
+  return userCollection.findOne({ token: token });
 }
 
 async function getWebsites(username) {
   try {
-    const result = await collection.find({"name": username}).toArray();
+    const result = await websiteCollection.find({"name": username}).toArray();
     return result;
   } catch (err) {
     console.log(err);
@@ -51,4 +67,4 @@ async function removeWebsite(username, website) {
   }
 }
 
-module.exports = {addUser, addWebsite, getUser, getWebsites, removeWebsite};
+module.exports = {addUser, addWebsite, getUser, getUserByToken, getWebsites, removeWebsite};

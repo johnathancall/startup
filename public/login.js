@@ -1,45 +1,42 @@
-async function login() {
-  const nameEl = document.querySelector("#username");
-  localStorage.setItem("username", nameEl.value);
-
-  const passEl = document.querySelector("#password");
-  localStorage.setItem("password", passEl.value);
-
-  const loginReq = {username: nameEl, password: passEl};
-
-  try {
-    const response = await fetch('api/login/', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(loginReq),
-    });
-
-  } catch {
-      console.log('login failed');
+(async () => {
+  const username = localStorage.getItem('username');
+  if(username) {
+    setDisplay('loginControls', 'block');
+  } else {
+    setDisplay('loginControls', 'block');
   }
+})();
 
-  window.location.href = "websites.html";
+async function login() {
+  loginOrRegister('/api/auth/login');
 }
 
 async function register() {
-  const nameEl = document.querySelector("#username");
-  localStorage.setItem("username", nameEl.value)
+  loginOrRegister('/api/auth/register');  
+}
 
-  const passEl = document.querySelector("#password");
-  localStorage.setItem("password", passEl.value);
+async function loginOrRegister(endpoint) {
+  const username = document.querySelector('#username')?.value;
+  const password = document.querySelector('#password')?.value;
 
-  const regReq = {username: nameEl, password: passEl};
+  const response = await fetch(endpoint, {
+    method: 'post',
+    body: JSON.stringify({username: username, password: password}),
+    headers: {'Content-type': 'application/json; charset=UTF-8'},
+  });
 
-  try {
-    const response = await fetch('api/register/', {
-      method: 'POST',
-      headers: {'content-type': 'application/json'},
-      body: JSON.stringify(regReq),
-    });
-    localStorage.setItem("regRes", response);
-  } catch (err) {
-    localStorage.setItem("regRes", err);
+  if(response.ok) {
+    console.log('ok');
+    window.location.href = 'websites.html'
+
+  } else {
+    console.log('unauthorized');
   }
+}
 
-  window.location.href = "websites.html";
+function setDisplay(controlID, display) {
+  const controlEl= document.querySelector(`#${controlID}`);
+  if(controlEl) {
+    controlEl.style.display = display;
+  }
 }
