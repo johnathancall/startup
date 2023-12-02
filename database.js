@@ -20,10 +20,7 @@ async function addUser(username, password) {
 }
 
 async function addWebsite(username, website) {
-  console.log(website);
-  console.log(username);
   const result = await collection.insertOne({name: username, site: website});
-  console.log(result);
   return result;
 }
 
@@ -41,4 +38,17 @@ async function getWebsites(username) {
   }
 }
 
-module.exports = {addUser, addWebsite, getUser, getWebsites};
+async function removeWebsite(username, website) {
+  const deleteQuery = {name: username, site: website};
+
+  try {
+    const result = await collection.deleteOne(deleteQuery);
+    console.log(deleteQuery);
+    return result;
+  } catch (err) {
+    console.log(err);
+    return null;
+  }
+}
+
+module.exports = {addUser, addWebsite, getUser, getWebsites, removeWebsite};

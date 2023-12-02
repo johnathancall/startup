@@ -30,9 +30,11 @@ async function loadWebsites() {
 }
 
 async function createWebsite() {
-  console.log(localStorage.getItem('regRes'));
-
   let website = prompt("New Website URL:", "https://google.com");
+
+  if(document.getElementById(website) != null) {
+    return createWebsiteFailed();
+  }
 
   if(website != null && website != "") {
     addWebsite(website);
@@ -53,6 +55,35 @@ async function createWebsite() {
     this.addWebsiteLocal(website);
   }
 }
+
+async function createWebsiteFailed() {
+  let website = prompt("Website already in list. New Website URL:", "https://google.com");
+
+  if(document.getElementById(website) != null) {
+    return createWebsiteFailed();
+  }
+
+  if(website != null && website != "") {
+    addWebsite(website);
+  }
+
+  const newWebsite = {name: website, username: localStorage.getItem('username')};
+
+  try {
+    const response = await fetch('api/website/', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(newWebsite),
+    });    
+
+    const websites = await response.json();
+    localStorage.setItem('websites', JSON.stringify(websites));
+  } catch {
+    this.addWebsiteLocal(website);
+  }
+}
+
+
 
 function addWebsiteLocal(website) {
   let websites = [];
@@ -106,14 +137,26 @@ function setItemID(itemContainer, website) {
     itemContainer.id = website;
     return;
   }
-  website = website + '1';
-  setItemID(itemContainer, website);
 }
 
-function removeWebsite(website) {
+async function removeWebsite(website) {
   const element = document.getElementById(website);
 
-  // Remove API needs implementation
+  const remReq = {username: localStorage.getItem("username"), website: website};
+  
+  try {
+    const response = await fetch('api/remove/', {
+      method: 'POST',
+      headers: {'content-type': 'application/json'},
+      body: JSON.stringify(remReq),
+    });    
+    
+    const websites = await response.json();
+    localStorage.setItem('websites', JSON.stringify(websites));
+
+  } catch(err) {
+    console.log(err);
+  }
 
   element.remove();
 }

@@ -43,10 +43,15 @@ apiRouter.post('/login/', async (req, res) => {
 });
 
 apiRouter.post('/register/', async (req, res) => {
-  username = req.query.username;
-
   await db.addUser(req.query.username, req.query.password);
   res.sendStatus(200);
+});
+
+apiRouter.post('/remove/', async (req, res) => {
+  await db.removeWebsite(username, req.body.website);
+  websites = await updateWebsites(username, websites);
+
+  res.send(websites);
 });
 
 // Return the homepage if the path is unknown
@@ -58,6 +63,11 @@ app.use((_req, res) => {
 let websites = [];
 function updateWebsites(newWebsite, websites) {
   websites.push(newWebsite);
+  return websites;
+}
+
+function removeWebsite(oldWebsite, websites) {
+  websites.splice(websites.indexOf(oldWebsite), 1);
   return websites;
 }
 
