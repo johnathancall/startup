@@ -1,43 +1,69 @@
 async function loadWebsites() {
-  let scores = [];
+  let websites = [];
   try {
     const response = await fetch('/api/websites');
-    scores = await response.json();
+    websites = await response.json();
+
+    console.log(response);
+    console.log(websites);
 
     localStorage.setItem('websites', JSON.stringify(websites));
-  } catch {
+    if(websites.length > 0) {
+      for(const obj of websites) {
+	if(obj.site != null) {
+          addWebsite(obj.site);
+	}
+      }
+    }
+  } catch (err) {
+    console.log(err);
     const websitesText = localStorage.getItem('websites');
     if (websitesText) {
       websites = JSON.parse(websitesText);
     }
-  }
-
-  for(const website of websites) {
-    addWebsite(website);
+    if(websites.length > 0) {
+      for(const website of websites) {
+        addWebsite(website);
+      }
+    }
   }
 }
 
 async function createWebsite() {
+  console.log(localStorage.getItem('regRes'));
+
   let website = prompt("New Website URL:", "https://google.com");
 
   if(website != null && website != "") {
     addWebsite(website);
   }
 
-  const newWebsite = {name: website};
+  const newWebsite = {name: website, username: localStorage.getItem('username')};
 
   try {
-    const response = await fetch('api/website', {
+    const response = await fetch('api/website/', {
       method: 'POST',
       headers: {'content-type': 'application/json'},
       body: JSON.stringify(newWebsite),
-    }
+    });    
 
     const websites = await response.json();
     localStorage.setItem('websites', JSON.stringify(websites));
   } catch {
-    // Put something here once I'm not tired of JS
+    this.addWebsiteLocal(website);
   }
+}
+
+function addWebsiteLocal(website) {
+  let websites = [];
+  const websitesText = localStorage.getItem('websites');
+  if(websitesText) {
+    websites = JSON.parse(websitesText);
+  }
+
+  websites.push(website);
+
+  localStorage.setItem('websites', JSON.stringify(websites));
 }
 
 
@@ -73,8 +99,6 @@ function addWebsite(website) {
 
   const parentContainer = document.querySelector('#container');
   parentContainer.appendChild(itemContainer);
-
-  addWebsiteToDB(website);
 }
 
 function setItemID(itemContainer, website) {
@@ -88,6 +112,9 @@ function setItemID(itemContainer, website) {
 
 function removeWebsite(website) {
   const element = document.getElementById(website);
+
+  // Remove API needs implementation
+
   element.remove();
 }
 
@@ -95,6 +122,4 @@ function getStatus(website) {		// Will eventually return actual status
   return 'Status: Running';
 }
 
-async function addWebsiteToDB(website) {	// Will eventually add website to database under username
-  
-}
+loadWebsites();

@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const db = require('./database.js');
 
+let username = 'test';
+
 // The service port defaults to 3000 or is read from the program arguments
 const port = process.argv.length > 2 ? process.argv[2] : 3000;
 
@@ -22,26 +24,28 @@ app.get('/config', (_req, res) => {
 var apiRouter = express.Router();
 app.use(`/api`, apiRouter);
 
-apiRouter.get('/websites', (req, res) => {
+apiRouter.get('/websites', async (req, res) => {
+  const websites = await db.getWebsites(username);
+
   res.send(websites);
 });
 
 apiRouter.post('/website/', async (req, res) => {
   websites = await updateWebsites(req.body.name, websites);
-  console.log(req.body.username);
   db.addWebsite(req.body.username, req.body.name);
   res.send(websites);
 });
 
 apiRouter.post('/login/', async (req, res) => {
   console.log('login');
+  username = req.query.username;
   res.send(await db.getUser((req.query.username, req.query.password)));
 });
 
 apiRouter.post('/register/', async (req, res) => {
-  console.log('register');
+  username = req.query.username;
+
   await db.addUser(req.query.username, req.query.password);
-  console.log('after');
   res.sendStatus(200);
 });
 

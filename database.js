@@ -20,7 +20,10 @@ async function addUser(username, password) {
 }
 
 async function addWebsite(username, website) {
+  console.log(website);
+  console.log(username);
   const result = await collection.insertOne({name: username, site: website});
+  console.log(result);
   return result;
 }
 
@@ -30,7 +33,7 @@ async function getUser(username, password) {
 
 async function getWebsites(username) {
   try {
-    const result = await collection.find({}).toArray();
+    const result = await collection.find({"name": username}).toArray();
     return result;
   } catch (err) {
     console.log(err);
