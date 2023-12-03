@@ -7,8 +7,8 @@
       <title>Bookmarker++</title>
       <link rel="icon" href="favicon.ico" />
 
-      <script src="login.js"></script>
       <link rel="stylesheet" href="main.css" />
+      <link rel="stylesheet" href="login.css" />
 
       <!-- Include bootstrap CSS framework -->
       <link
@@ -40,8 +40,8 @@
       <main>
 	<div>
           <h1>Welcome</h1>
-          <p>Login to view your websites</p>
-	  <div id="loginControls" style="display: block">
+          <p>Login to view websites</p>
+	  <div id="loginControls" style="display: none">
 	    <div>
               <label for="name">Username</label>
               <input type="text" id="username" placeholder="username" />
@@ -55,6 +55,11 @@
 	      <button type="submit" onclick="register()">Register</button>
 	    </div>
           </div>
+	  <div id="logoutControls" style="display: none">
+	      <div id="playerName"></div>
+	      <button type="submit" onclick="viewWebsites()">View Websites</button>
+	      <button type="submit" onclick="logout()">Log Out</button>
+	  </div>
 	</div>
       </main>
   
@@ -62,6 +67,7 @@
         <span class="text-reset">Johnathan Call</span>
         <a href="https://github.com/johnathancall/startup">GitHub</a>
       </footer>
+      <script src="login.js"></script>
     </body>
   </html>
 
