@@ -28,7 +28,7 @@ async function loginOrRegister(endpoint) {
   });
 
   if(response.ok) {
-    console.log('ok');
+    localStorage.setItem('username', username);
     window.location.href = 'websites.html';
 
   } else {
@@ -38,9 +38,7 @@ async function loginOrRegister(endpoint) {
 
 function setDisplay(controlID, display) {
   const controlEl = document.querySelector(`#${controlID}`);
-  console.log('first');
   if(controlEl) {
-    console.log('console');
     controlEl.style.display = display;
   }
 }
@@ -49,6 +47,10 @@ function viewWebsites() {
    window.location.href = 'websites.html';
 }
 
-async function logout() {
+function logout() {
   localStorage.removeItem('username');
+
+  fetch(`/api/auth/logout`, {
+    method: 'delete'
+  }).then(() => (window.location.href = '/'));
 }
