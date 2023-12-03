@@ -75,4 +75,10 @@ Included /register/ and /login/ endpoints, called upon register and login respec
 
 Added database.js to create new collection for each user under the startup database
 
+## Login Deliverable
 
+Included support for new user registration and existing user authentication
+
+Included calls to store and retrieve credentials in MongoDB
+
+Removed the ability to access the "Websites" and "About" subdomains without logging in first.
