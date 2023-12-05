@@ -23,6 +23,13 @@ button {
   color: white;
 }
 
+h4 {
+  color: white;
+  text-align: center;
+  padding-top: 15px;
+
+}
+
 .container {
   flex: 1;
   display: flex;
@@ -45,7 +52,7 @@ button {
  align-self: flex-start;
  align-items: center;
 
- font-size: 20px;
+ /*font-size: 20px;*/
 
  margin: 20px;
 }
@@ -56,15 +63,7 @@ button {
   padding: 10px;
   border-radius: 15px;
 
-  font-size: 15px;
-}
-
-.status {
-  color: white;
-  margin: 20px;
-
-  /*text-align: center;
-  vertical-align: center;*/
+  /*font-size: 15px;*/
 }
 
 .addWebsiteButton {
