@@ -31,7 +31,7 @@ async function addUser(username, password) {
 }
 
 async function addWebsite(username, website) {
-  const result = await collection.insertOne({name: username, site: website});
+  const result = await websiteCollection.insertOne({name: username, site: website});
   return result;
 }
 
@@ -58,7 +58,7 @@ async function removeWebsite(username, website) {
   const deleteQuery = {name: username, site: website};
 
   try {
-    const result = await collection.deleteOne(deleteQuery);
+    const result = await websiteCollection.deleteOne(deleteQuery);
     console.log(deleteQuery);
     return result;
   } catch (err) {

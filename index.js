@@ -102,6 +102,13 @@ secureApiRouter.post('/website/', async (req, res) => {
   res.send(websites);
 });
 
+secureApiRouter.post('/remove/', async (req, res) => {
+  console.log('removing');
+  websites = await removeWebsite(req.body.website, websites);
+  DB.removeWebsite(req.body.username, req.body.website);
+  res.send(websites);
+});
+
 
 // Default error handler
 app.use(function (err, req, res, next) {
