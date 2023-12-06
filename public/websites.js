@@ -1,11 +1,13 @@
 async function loadWebsites() {
+
+  if(localStorage.getItem('newWebsiteMsg') != null) {
+    console.log('here');
+    displayMsg(localStorage.getItem('newWebsiteMsg'));
+  }
+
   let websites = [];
   try {
     const response = await fetch('/api/websites');
-    websites = await response.json();
-
-    console.log(response);
-    console.log(websites);
 
     localStorage.setItem('websites', JSON.stringify(websites));
     if(websites.length > 0) {
@@ -54,13 +56,20 @@ async function createWebsite() {
   } catch {
     this.addWebsiteLocal(website);
   }
+
+  if(website != null) {
+    this.broadcastEvent(website);
+
+    const introString = 'Most recently added website: ';
+    displayMsg(introString.concat(website));
+  }
 }
 
 async function createWebsiteFailed() {
   let website = prompt("Website already in list. New Website URL:", "https://google.com");
 
   if(document.getElementById(website) != null) {
-    return createWebsiteFailed();
+	  return createWebsiteFailed();
   }
 
   if(website != null && website != "") {
@@ -82,8 +91,6 @@ async function createWebsiteFailed() {
     this.addWebsiteLocal(website);
   }
 }
-
-
 
 function addWebsiteLocal(website) {
   let websites = [];
@@ -146,8 +153,9 @@ async function removeWebsite(website) {
       headers: {'content-type': 'application/json'},
       body: JSON.stringify(remReq),
     });    
-    
+
     const websites = await response.json();
+
     localStorage.setItem('websites', JSON.stringify(websites));
 
   } catch(err) {
@@ -159,34 +167,32 @@ async function removeWebsite(website) {
 
 // WS stuff
 function configureWebSocket() {
+  try {
     const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
     this.socket = new WebSocket(`${protocol}://${window.location.host}/ws`);
     this.socket.onopen = (event) => {
-      this.displayMsg('system', 'game', 'connected');
     };
     this.socket.onclose = (event) => {
-      this.displayMsg('system', 'game', 'disconnected');
     };
     this.socket.onmessage = async (event) => {
       const msg = JSON.parse(await event.data.text());
-      if (msg.type === GameEndEvent) {
-        this.displayMsg('player', msg.from, `scored ${msg.value.score}`);
-      } else if (msg.type === GameStartEvent) {
-        this.displayMsg('player', msg.from, `started a new game`);
-      }
+      this.displayMsg(`Most recently added website: ${msg.value}`);
     };
+  } catch(err) {
+    console.log(err);
+  }
 }
 
-function displayMsg(cls, from, msg) {
-  const chatText = document.querySelector('#player-messages');
-  chatText.innerHTML =
-    `<div class="event"><span class="${cls}-event">${from}</span> ${msg}</div>` + chatText.innerHTML;
+function displayMsg(msg) {
+  const newWebsite = document.querySelector('#recentWebsite');
+
+  localStorage.setItem('newWebsiteMsg', msg);
+
+  newWebsite.innerText = msg;
 }
 
-function broadcastEvent(from, type, value) {
+function broadcastEvent(value) {
   const event = {
-    from: from,
-    type: type,
     value: value,
   };
   this.socket.send(JSON.stringify(event));
@@ -194,3 +200,4 @@ function broadcastEvent(from, type, value) {
 
 
 loadWebsites();
+this.configureWebSocket();
