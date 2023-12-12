@@ -82,3 +82,9 @@ Included support for new user registration and existing user authentication
 Included calls to store and retrieve credentials in MongoDB
 
 Removed the ability to access the "Websites" and "About" subdomains without logging in first.
+
+## Websocket Deliverable
+
+Removed status functionality.
+
+Utilized communication over websockets to display the most recently added website to all users.
